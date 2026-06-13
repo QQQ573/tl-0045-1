@@ -1,0 +1,736 @@
+{
+  "version": "2026-06-v1",
+  "updatedAt": "2026-06-13T10:00:00Z",
+  "allergens": [
+    { "key": "gluten", "labelZh": "麸质", "labelShort": "麸质", "isHighRisk": true },
+    { "key": "dairy", "labelZh": "乳制品", "labelShort": "乳品", "isHighRisk": false },
+    { "key": "egg", "labelZh": "蛋类", "labelShort": "蛋类", "isHighRisk": false },
+    { "key": "peanut", "labelZh": "花生", "labelShort": "花生", "isHighRisk": true },
+    { "key": "treenut", "labelZh": "坚果", "labelShort": "坚果", "isHighRisk": false },
+    { "key": "soy", "labelZh": "大豆", "labelShort": "大豆", "isHighRisk": false },
+    { "key": "fish", "labelZh": "鱼类", "labelShort": "鱼类", "isHighRisk": false },
+    { "key": "shellfish", "labelZh": "甲壳类", "labelShort": "甲壳", "isHighRisk": false }
+  ],
+  "skus": [
+    {
+      "id": "kfc-001",
+      "brand": "kfc",
+      "skuCode": "KFC-BUR-001",
+      "nameZh": "香辣鸡腿堡",
+      "nameEn": "Zinger Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-002",
+      "brand": "kfc",
+      "skuCode": "KFC-BUR-002",
+      "nameZh": "劲脆鸡腿堡",
+      "nameEn": "Crispy Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-003",
+      "brand": "kfc",
+      "skuCode": "KFC-BUR-003",
+      "nameZh": "新奥尔良烤鸡腿堡",
+      "nameEn": "New Orleans Roasted Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "M",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-004",
+      "brand": "kfc",
+      "skuCode": "KFC-BUR-004",
+      "nameZh": "香辣鸡柳堡",
+      "nameEn": "Spicy Chicken Strip Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "U",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-005",
+      "brand": "kfc",
+      "skuCode": "KFC-BUR-005",
+      "nameZh": "培根鸡腿堡",
+      "nameEn": "Bacon Chicken Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-006",
+      "brand": "kfc",
+      "skuCode": "KFC-SID-001",
+      "nameZh": "香辣鸡翅",
+      "nameEn": "Hot Wings",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-007",
+      "brand": "kfc",
+      "skuCode": "KFC-SID-002",
+      "nameZh": "吮指原味鸡",
+      "nameEn": "Original Recipe Chicken",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "M",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-008",
+      "brand": "kfc",
+      "skuCode": "KFC-SID-003",
+      "nameZh": "劲爆鸡米花",
+      "nameEn": "Popcorn Chicken",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "M",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-009",
+      "brand": "kfc",
+      "skuCode": "KFC-SID-004",
+      "nameZh": "黄金鸡块",
+      "nameEn": "Nuggets",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-010",
+      "brand": "kfc",
+      "skuCode": "KFC-BEV-001",
+      "nameZh": "九珍果汁",
+      "nameEn": "9 Treasures Juice",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-011",
+      "brand": "kfc",
+      "skuCode": "KFC-BEV-002",
+      "nameZh": "醇香奶茶",
+      "nameEn": "Milk Tea",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-012",
+      "brand": "kfc",
+      "skuCode": "KFC-BEV-003",
+      "nameZh": "可乐",
+      "nameEn": "Cola",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-013",
+      "brand": "kfc",
+      "skuCode": "KFC-DES-001",
+      "nameZh": "原味蛋挞",
+      "nameEn": "Egg Tart",
+      "category": "甜点",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "kfc-014",
+      "brand": "kfc",
+      "skuCode": "KFC-DES-002",
+      "nameZh": "花生巧克力圣代",
+      "nameEn": "Peanut Chocolate Sundae",
+      "category": "甜点",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "Y",
+        "treenut": "M",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-001",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BUR-001",
+      "nameZh": "巨无霸",
+      "nameEn": "Big Mac",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-002",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BUR-002",
+      "nameZh": "麦辣鸡腿堡",
+      "nameEn": "McSpicy Chicken",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-003",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BUR-003",
+      "nameZh": "板烧鸡腿堡",
+      "nameEn": "Grilled Chicken Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-004",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BUR-004",
+      "nameZh": "吉士汉堡",
+      "nameEn": "Cheeseburger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-005",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BUR-005",
+      "nameZh": "麦香鸡",
+      "nameEn": "McChicken",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "Y",
+        "peanut": "U",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-006",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-SID-001",
+      "nameZh": "麦乐鸡块",
+      "nameEn": "McNuggets",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-007",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-SID-002",
+      "nameZh": "薯条",
+      "nameEn": "Fries",
+      "category": "小食",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "M",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-008",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-SID-003",
+      "nameZh": "辣翅",
+      "nameEn": "Spicy Wings",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-009",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-SID-004",
+      "nameZh": "吉士蛋麦满分",
+      "nameEn": "Egg McMuffin",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-010",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BEV-001",
+      "nameZh": "McCafe 拿铁",
+      "nameEn": "McCafe Latte",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-011",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BEV-002",
+      "nameZh": "橙汁",
+      "nameEn": "Orange Juice",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-012",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-BEV-003",
+      "nameZh": "零度可乐",
+      "nameEn": "Coke Zero",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-013",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-DES-001",
+      "nameZh": "麦旋风（奥利奥）",
+      "nameEn": "McFlurry Oreo",
+      "category": "甜点",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "M",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "mcd-014",
+      "brand": "mcdonalds",
+      "skuCode": "MCD-DES-002",
+      "nameZh": "苹果派",
+      "nameEn": "Apple Pie",
+      "category": "甜点",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "M",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-001",
+      "brand": "华莱士",
+      "skuCode": "HLS-BUR-001",
+      "nameZh": "香辣鸡腿堡",
+      "nameEn": "Spicy Chicken Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-002",
+      "brand": "华莱士",
+      "skuCode": "HLS-BUR-002",
+      "nameZh": "牛肉堡",
+      "nameEn": "Beef Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-003",
+      "brand": "华莱士",
+      "skuCode": "HLS-BUR-003",
+      "nameZh": "鲜虾堡",
+      "nameEn": "Shrimp Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "Y"
+      }
+    },
+    {
+      "id": "hls-004",
+      "brand": "华莱士",
+      "skuCode": "HLS-BUR-004",
+      "nameZh": "鸡排堡",
+      "nameEn": "Chicken Steak Burger",
+      "category": "汉堡",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "U",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-005",
+      "brand": "华莱士",
+      "skuCode": "HLS-SID-001",
+      "nameZh": "香辣鸡翅",
+      "nameEn": "Spicy Chicken Wings",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-006",
+      "brand": "华莱士",
+      "skuCode": "HLS-SID-002",
+      "nameZh": "鸡米花",
+      "nameEn": "Popcorn Chicken",
+      "category": "小食",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "Y",
+        "peanut": "Y",
+        "treenut": "M",
+        "soy": "Y",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-007",
+      "brand": "华莱士",
+      "skuCode": "HLS-SID-003",
+      "nameZh": "薯条",
+      "nameEn": "French Fries",
+      "category": "小食",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-008",
+      "brand": "华莱士",
+      "skuCode": "HLS-BEV-001",
+      "nameZh": "奶茶",
+      "nameEn": "Milk Tea",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-009",
+      "brand": "华莱士",
+      "skuCode": "HLS-BEV-002",
+      "nameZh": "橙汁",
+      "nameEn": "Orange Juice",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-010",
+      "brand": "华莱士",
+      "skuCode": "HLS-BEV-003",
+      "nameZh": "花生奶露",
+      "nameEn": "Peanut Milk",
+      "category": "饮料",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "Y",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-011",
+      "brand": "华莱士",
+      "skuCode": "HLS-DES-001",
+      "nameZh": "巧克力圣代",
+      "nameEn": "Chocolate Sundae",
+      "category": "甜点",
+      "allergens": {
+        "gluten": "N",
+        "dairy": "Y",
+        "egg": "N",
+        "peanut": "M",
+        "treenut": "Y",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    },
+    {
+      "id": "hls-012",
+      "brand": "华莱士",
+      "skuCode": "HLS-DES-002",
+      "nameZh": "红豆派",
+      "nameEn": "Red Bean Pie",
+      "category": "甜点",
+      "allergens": {
+        "gluten": "Y",
+        "dairy": "N",
+        "egg": "N",
+        "peanut": "N",
+        "treenut": "N",
+        "soy": "N",
+        "fish": "N",
+        "shellfish": "N"
+      }
+    }
+  ]
+}
