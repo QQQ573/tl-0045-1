@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Download, ChevronRight, CheckCircle2 } from "lucide-react";
 import { useAllergenStore } from "@/store/useAllergenStore";
 import { BRAND_COLORS } from "@/constants/colorPalette";
@@ -26,7 +26,7 @@ function exportToCSV(skus: SKU[], brand: BrandKey) {
 const SafeMenuBar = memo(function SafeMenuBar() {
   const { getCompliantSkusByBrand, profile } = useAllergenStore();
 
-  const brands: BrandKey[] = ["kfc", "mcdonalds", "华莱士"];
+  const brands = useMemo<BrandKey[]>(() => ["kfc", "mcdonalds", "华莱士"], []);
 
   const handleExportAll = useCallback(() => {
     const allSkus: SKU[] = [];

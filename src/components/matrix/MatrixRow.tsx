@@ -13,9 +13,20 @@ interface MatrixRowProps {
 }
 
 const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowProps) {
-  const { hoveredRow, selectedSkus, toggleSkuSelection, setHoveredRow, setHoveredCol, isSkuCompliant } = useAllergenStore();
+  const {
+    hoveredRow,
+    selectedSkus,
+    toggleSkuSelection,
+    setHoveredRow,
+    setHoveredCol,
+    isSkuCompliant,
+    highlightedSkus,
+    highlightedStatus,
+  } = useAllergenStore();
+
   const isHovered = hoveredRow === sku.id;
   const isSelected = selectedSkus.includes(sku.id);
+  const isHighlighted = highlightedSkus.includes(sku.id);
   const brandColor = BRAND_COLORS[sku.brand as BrandKey];
   const compliant = isSkuCompliant(sku);
 
@@ -29,7 +40,8 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
         "flex items-center border-b border-slate-200 transition-all cursor-pointer group relative",
         isHovered && "row-hover",
         isSelected && "selected-row",
-        compliant ? "border-l-4 border-l-emerald-500" : "border-l-4 border-l-red-500"
+        compliant ? "border-l-4 border-l-emerald-500" : "border-l-4 border-l-red-500",
+        isHighlighted && highlightedStatus && "ring-2 ring-blue-500 ring-inset"
       )}
       style={style}
       onClick={handleClick}
@@ -43,7 +55,8 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
         className={cn(
           "sticky-col w-72 flex-shrink-0 flex items-center gap-3 px-4 py-2.5 border-r border-slate-200 h-[48px]",
           isSelected && "bg-blue-50",
-          compliant ? "bg-white" : "bg-red-50"
+          compliant ? "bg-white" : "bg-red-50",
+          isHighlighted && highlightedStatus && "bg-blue-50"
         )}
       >
         <div className="flex items-center gap-1.5">
@@ -82,7 +95,7 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
           </div>
         )}
       </div>
-      <div className={cn("flex", compliant ? "" : "bg-red-50")}>
+      <div className={cn("flex", compliant ? "" : "bg-red-50", isHighlighted && highlightedStatus && "bg-blue-50")}>
         {allergens.map((a) => (
           <MatrixCell
             key={a.key}

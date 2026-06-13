@@ -5,6 +5,8 @@ import ComparisonDrawer from "@/components/ComparisonDrawer";
 import Empty from "@/components/Empty";
 import AllergyProfileSidebar from "@/components/AllergyProfileSidebar";
 import SafeMenuBar from "@/components/SafeMenuBar";
+import AllergenColumnAnalysis from "@/components/AllergenColumnAnalysis";
+import MiniHeatmap from "@/components/MiniHeatmap";
 import { useAllergenStore } from "@/store/useAllergenStore";
 import { useAllergenData } from "@/hooks/useAllergenData";
 import { BRAND_LABELS, BrandKey, SKU } from "@/types/allergen";
@@ -270,6 +272,8 @@ export default function Home() {
       </div>
 
       <ComparisonDrawer />
+      <AllergenColumnAnalysis />
+      <MiniHeatmap />
     </div>
   );
 }
