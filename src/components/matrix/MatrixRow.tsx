@@ -4,7 +4,7 @@ import { BRAND_COLORS } from "@/constants/colorPalette";
 import MatrixCell from "./MatrixCell";
 import { useAllergenStore } from "@/store/useAllergenStore";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { Check, AlertTriangle, CheckCircle2 } from "lucide-react";
 
 interface MatrixRowProps {
   sku: SKU;
@@ -13,10 +13,11 @@ interface MatrixRowProps {
 }
 
 const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowProps) {
-  const { hoveredRow, selectedSkus, toggleSkuSelection, setHoveredRow, setHoveredCol } = useAllergenStore();
+  const { hoveredRow, selectedSkus, toggleSkuSelection, setHoveredRow, setHoveredCol, isSkuCompliant } = useAllergenStore();
   const isHovered = hoveredRow === sku.id;
   const isSelected = selectedSkus.includes(sku.id);
   const brandColor = BRAND_COLORS[sku.brand as BrandKey];
+  const compliant = isSkuCompliant(sku);
 
   const handleClick = useCallback(() => {
     toggleSkuSelection(sku.id);
@@ -25,9 +26,10 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
   return (
     <div
       className={cn(
-        "flex items-center border-b border-slate-200 transition-colors cursor-pointer group",
+        "flex items-center border-b border-slate-200 transition-all cursor-pointer group relative",
         isHovered && "row-hover",
-        isSelected && "selected-row"
+        isSelected && "selected-row",
+        compliant ? "border-l-4 border-l-emerald-500" : "border-l-4 border-l-red-500"
       )}
       style={style}
       onClick={handleClick}
@@ -39,19 +41,27 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
     >
       <div
         className={cn(
-          "sticky-col w-72 flex-shrink-0 flex items-center gap-3 px-4 py-2.5 bg-white border-r border-slate-200 h-[48px]",
-          isSelected && "bg-blue-50"
+          "sticky-col w-72 flex-shrink-0 flex items-center gap-3 px-4 py-2.5 border-r border-slate-200 h-[48px]",
+          isSelected && "bg-blue-50",
+          compliant ? "bg-white" : "bg-red-50"
         )}
       >
-        <div
-          className="w-1.5 h-8 rounded-sm flex-shrink-0"
-          style={{ backgroundColor: brandColor.primary }}
-        />
+        <div className="flex items-center gap-1.5">
+          <div
+            className="w-1.5 h-8 rounded-sm flex-shrink-0"
+            style={{ backgroundColor: brandColor.primary }}
+          />
+          {compliant ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+          ) : (
+            <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />
+          )}
+        </div>
         <div className="flex-1 min-w-0">
           <div className="text-[10px] font-mono text-slate-400 mb-0.5">
             {sku.skuCode}
           </div>
-          <div className="font-semibold text-slate-900 text-sm truncate">
+          <div className={cn("font-semibold text-sm truncate", compliant ? "text-slate-900" : "text-red-700")}>
             {sku.nameZh}
           </div>
           <div className="flex items-center gap-1.5 mt-0.5">
@@ -72,7 +82,7 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
           </div>
         )}
       </div>
-      <div className="flex">
+      <div className={cn("flex", compliant ? "" : "bg-red-50")}>
         {allergens.map((a) => (
           <MatrixCell
             key={a.key}
