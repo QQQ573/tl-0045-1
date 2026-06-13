@@ -20,7 +20,7 @@ const MatrixCell = memo(function MatrixCell({ status, rowId, colKey }: MatrixCel
   return (
     <div
       className={cn(
-        "matrix-cell w-12 h-12 flex items-center justify-center font-bold text-sm border border-slate-200 cursor-default select-none",
+        "matrix-cell w-12 h-12 flex items-center justify-center font-bold text-sm border-r border-b border-slate-200 cursor-default select-none flex-shrink-0",
         colors.bg,
         colors.text,
         colors.pattern,

@@ -25,7 +25,7 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
   return (
     <div
       className={cn(
-        "flex items-stretch border-b border-slate-200 transition-colors cursor-pointer group",
+        "flex items-center border-b border-slate-200 transition-colors cursor-pointer group",
         isHovered && "row-hover",
         isSelected && "selected-row"
       )}
@@ -39,30 +39,36 @@ const MatrixRow = memo(function MatrixRow({ sku, allergens, style }: MatrixRowPr
     >
       <div
         className={cn(
-          "sticky-col w-72 flex items-center gap-2 px-3 py-2 bg-white border-r border-slate-200",
+          "sticky-col w-72 flex-shrink-0 flex items-center gap-3 px-4 py-2.5 bg-white border-r border-slate-200 h-[48px]",
           isSelected && "bg-blue-50"
         )}
       >
         <div
-          className="w-2 h-8 rounded-sm flex-shrink-0"
+          className="w-1.5 h-8 rounded-sm flex-shrink-0"
           style={{ backgroundColor: brandColor.primary }}
         />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500 font-mono">{sku.skuCode}</span>
+          <div className="text-[10px] font-mono text-slate-400 mb-0.5">
+            {sku.skuCode}
+          </div>
+          <div className="font-semibold text-slate-900 text-sm truncate">
+            {sku.nameZh}
+          </div>
+          <div className="flex items-center gap-1.5 mt-0.5">
             <span
-              className="text-xs px-1.5 py-0.5 rounded"
+              className="text-[9px] px-1.5 py-0.5 rounded"
               style={{ backgroundColor: brandColor.light, color: brandColor.primary }}
             >
               {BRAND_LABELS[sku.brand as BrandKey]}
             </span>
+            <span className="text-[10px] text-slate-400 truncate">
+              {sku.nameEn}
+            </span>
           </div>
-          <div className="font-medium text-slate-900 truncate">{sku.nameZh}</div>
-          <div className="text-xs text-slate-500 truncate">{sku.nameEn}</div>
         </div>
         {isSelected && (
-          <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
-            <Check className="w-4 h-4 text-white" />
+          <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+            <Check className="w-3 h-3 text-white" />
           </div>
         )}
       </div>

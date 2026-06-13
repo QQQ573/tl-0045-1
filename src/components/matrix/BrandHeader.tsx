@@ -24,41 +24,43 @@ const BrandHeader = memo(function BrandHeader({ brand, skuCount, maxRisk, style 
         "flex items-center border-b-2 border-slate-300 cursor-pointer transition-colors hover:bg-slate-50",
         isCollapsed && "bg-slate-50"
       )}
-      style={style}
+      style={{ ...style, height: "48px" }}
       onClick={() => toggleBrandCollapse(brand)}
     >
       <div
-        className="sticky-col w-72 flex items-center gap-3 px-3 py-2.5 bg-inherit border-r border-slate-300"
+        className={cn(
+          "sticky-col w-72 flex-shrink-0 flex items-center gap-2 px-4 bg-inherit border-r border-slate-300 h-[48px]"
+        )}
         style={{ backgroundColor: isCollapsed ? brandColor.light : "white" }}
       >
         {isCollapsed ? (
-          <ChevronRight className="w-5 h-5 text-slate-500" />
+          <ChevronRight className="w-4 h-4 text-slate-500 flex-shrink-0" />
         ) : (
-          <ChevronDown className="w-5 h-5 text-slate-500" />
+          <ChevronDown className="w-4 h-4 text-slate-500 flex-shrink-0" />
         )}
         <div
-          className="w-3 h-8 rounded-sm"
+          className="w-1.5 h-8 rounded-sm flex-shrink-0"
           style={{ backgroundColor: brandColor.primary }}
         />
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-800" style={{ color: brandColor.primary }}>
+            <span className="font-bold text-slate-800 text-sm" style={{ color: brandColor.primary }}>
               {BRAND_LABELS[brand]}
             </span>
-            <span className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-full font-medium">
               {skuCount} 个 SKU
             </span>
           </div>
-          <div className="text-xs text-slate-500">
+          <div className="text-[10px] text-slate-400">
             {isCollapsed ? "点击展开" : "点击折叠"}
           </div>
         </div>
         {isCollapsed && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500">最高风险:</span>
+          <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+            <span className="text-[9px] text-slate-400">最高风险</span>
             <div
               className={cn(
-                "w-10 h-10 rounded flex items-center justify-center font-bold text-sm border-2",
+                "w-7 h-7 rounded flex items-center justify-center font-bold text-xs border-2 flex-shrink-0",
                 riskColors.bg,
                 riskColors.text,
                 riskColors.border,
@@ -70,11 +72,11 @@ const BrandHeader = memo(function BrandHeader({ brand, skuCount, maxRisk, style 
           </div>
         )}
       </div>
-      <div className="flex items-center px-4">
+      <div className="flex flex-shrink-0 items-center px-4 h-[48px]">
         {isCollapsed && (
-          <div className="flex items-center gap-1.5 text-sm text-slate-600">
-            <AlertTriangle className="w-4 h-4 text-amber-500" />
-            <span>已折叠，显示品牌最高风险等级</span>
+          <div className="flex items-center gap-1.5">
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
+            <span className="text-xs text-slate-500">已折叠，显示最高风险</span>
           </div>
         )}
       </div>

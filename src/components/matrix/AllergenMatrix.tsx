@@ -7,8 +7,8 @@ import MatrixRow from "./MatrixRow";
 import BrandHeader from "./BrandHeader";
 
 const BRANDS: BrandKey[] = ["kfc", "mcdonalds", "华莱士"];
-const BRAND_HEADER_HEIGHT = 56;
-const SKU_ROW_HEIGHT = 64;
+const BRAND_HEADER_HEIGHT = 48;
+const SKU_ROW_HEIGHT = 48;
 
 type VirtualItem =
   | { type: "brand"; brand: BrandKey; index: number }
@@ -50,7 +50,6 @@ export default function AllergenMatrix() {
       return item?.type === "brand" ? BRAND_HEADER_HEIGHT : SKU_ROW_HEIGHT;
     }, [items]),
     overscan: 10,
-    scrollPaddingStart: 48,
   });
 
   const scrollToSku = useCallback((skuId: string) => {
@@ -89,7 +88,7 @@ export default function AllergenMatrix() {
         className="virtual-scroll-container flex-1 overflow-auto"
         style={{ contain: "strict" }}
       >
-        <div style={{ height: virtualizer.getTotalSize(), position: "relative", width: "max-content" }}>
+        <div style={{ height: virtualizer.getTotalSize(), position: "relative", width: "100%" }}>
           {virtualItems.map((virtualItem) => {
             const item = items[virtualItem.index];
             if (!item) return null;
