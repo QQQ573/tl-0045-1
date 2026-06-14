@@ -1,5 +1,5 @@
 import { memo, useCallback } from "react";
-import { X, BarChart3, AlertTriangle } from "lucide-react";
+import { X, BarChart3, AlertTriangle, Filter } from "lucide-react";
 import { useAllergenStore } from "@/store/useAllergenStore";
 import { BRAND_COLORS, STATUS_COLORS } from "@/constants/colorPalette";
 import { BRAND_LABELS, BrandKey, AllergenStatus } from "@/types/allergen";
@@ -18,6 +18,9 @@ const AllergenColumnAnalysis = memo(function AllergenColumnAnalysis() {
     highlightedStatus,
     highlightByStatus,
     clearHighlight,
+    searchQuery,
+    profile,
+    collapsedBrands,
   } = useAllergenStore();
 
   const analysis = getColumnAnalysis();
@@ -31,6 +34,7 @@ const AllergenColumnAnalysis = memo(function AllergenColumnAnalysis() {
   if (!analysisOpen || !allergen) return null;
 
   const brands: BrandKey[] = ["kfc", "mcdonalds", "华莱士"];
+  const isFiltered = searchQuery.trim() !== "" || profile.showOnlyCompliant || collapsedBrands.size > 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -43,7 +47,16 @@ const AllergenColumnAnalysis = memo(function AllergenColumnAnalysis() {
             </div>
             <div>
               <h2 className="font-bold text-slate-800 text-lg">{allergen.labelZh} 过敏原分析</h2>
-              <p className="text-xs text-slate-500">各品牌在该过敏原列的分布情况</p>
+              <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                {isFiltered ? (
+                  <>
+                    <Filter className="w-3 h-3" />
+                    统计范围: 当前筛选结果 ({analysis.filteredTotal} 款)
+                  </>
+                ) : (
+                  "统计范围: 全部 SKU"
+                )}
+              </p>
             </div>
           </div>
           <button
@@ -65,9 +78,10 @@ const AllergenColumnAnalysis = memo(function AllergenColumnAnalysis() {
                 const stats = analysis.brandStats[brand];
                 const total = stats.Y + stats.M + stats.N + stats.U;
                 const brandColor = BRAND_COLORS[brand];
+                const isCollapsed = collapsedBrands.has(brand);
 
                 return (
-                  <div key={brand} className="space-y-2">
+                  <div key={brand} className={cn("space-y-2", isCollapsed && "opacity-50")}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div
@@ -78,76 +92,89 @@ const AllergenColumnAnalysis = memo(function AllergenColumnAnalysis() {
                           {BRAND_LABELS[brand]}
                         </span>
                         <span className="text-xs text-slate-400">({total} 款)</span>
+                        {isCollapsed && (
+                          <span className="text-[10px] px-1.5 py-0.5 bg-slate-200 text-slate-500 rounded">
+                            已折叠
+                          </span>
+                        )}
                       </div>
                     </div>
-                    <div className="h-8 rounded-lg overflow-hidden flex">
-                      {STATUS_ORDER.map((status) => {
-                        const count = stats[status];
-                        const width = total > 0 ? (count / total) * 100 : 0;
-                        const colors = STATUS_COLORS[status];
-                        const isHighlighted = highlightedStatus === status;
+                    {total > 0 ? (
+                      <>
+                        <div className="h-8 rounded-lg overflow-hidden flex">
+                          {STATUS_ORDER.map((status) => {
+                            const count = stats[status];
+                            const width = total > 0 ? (count / total) * 100 : 0;
+                            const colors = STATUS_COLORS[status];
+                            const isHighlighted = highlightedStatus === status;
 
-                        if (width === 0) return null;
+                            if (width === 0) return null;
 
-                        return (
-                          <button
-                            key={status}
-                            onClick={() => {
-                              if (highlightedStatus === status) {
-                                clearHighlight();
-                              } else {
-                                highlightByStatus(status);
-                              }
-                            }}
-                            className={cn(
-                              "flex items-center justify-center text-xs font-bold transition-all relative group",
-                              colors.bg,
-                              colors.text,
-                              isHighlighted && "ring-2 ring-blue-500 ring-inset"
-                            )}
-                            style={{ width: `${width}%` }}
-                            title={`${STATUS_LABELS[status]}: ${count} 款 (${width.toFixed(1)}%)`}
-                          >
-                            <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                              {status} {count}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    <div className="flex gap-4 text-xs">
-                      {STATUS_ORDER.map((status) => {
-                        const count = stats[status];
-                        const width = total > 0 ? (count / total) * 100 : 0;
-                        const colors = STATUS_COLORS[status];
-                        const isHighlighted = highlightedStatus === status;
+                            return (
+                              <button
+                                key={status}
+                                onClick={() => {
+                                  if (highlightedStatus === status) {
+                                    clearHighlight();
+                                  } else {
+                                    highlightByStatus(status);
+                                  }
+                                }}
+                                className={cn(
+                                  "flex items-center justify-center text-xs font-bold transition-all relative group",
+                                  colors.bg,
+                                  colors.text,
+                                  isHighlighted && "ring-2 ring-blue-500 ring-inset"
+                                )}
+                                style={{ width: `${width}%` }}
+                                title={`${STATUS_LABELS[status]}: ${count} 款 (${width.toFixed(1)}%)`}
+                              >
+                                <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                  {status} {count}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="flex gap-4 text-xs">
+                          {STATUS_ORDER.map((status) => {
+                            const count = stats[status];
+                            const width = total > 0 ? (count / total) * 100 : 0;
+                            const colors = STATUS_COLORS[status];
+                            const isHighlighted = highlightedStatus === status;
 
-                        return (
-                          <button
-                            key={status}
-                            onClick={() => {
-                              if (highlightedStatus === status) {
-                                clearHighlight();
-                              } else {
-                                highlightByStatus(status);
-                              }
-                            }}
-                            className={cn(
-                              "flex items-center gap-1 px-2 py-1 rounded transition-colors",
-                              isHighlighted ? "bg-blue-100 ring-1 ring-blue-500" : "hover:bg-slate-100"
-                            )}
-                          >
-                            <div
-                              className={cn("w-3 h-3 rounded-sm", colors.bg)}
-                              style={{ backgroundColor: isHighlighted ? undefined : colors.bg === "bg-slate-300" ? "#cbd5e1" : undefined }}
-                            />
-                            <span className="text-slate-600">{STATUS_LABELS[status]}</span>
-                            <span className="font-medium">{count}</span>
-                            <span className="text-slate-400">({width.toFixed(0)}%)</span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                            return (
+                              <button
+                                key={status}
+                                onClick={() => {
+                                  if (highlightedStatus === status) {
+                                    clearHighlight();
+                                  } else {
+                                    highlightByStatus(status);
+                                  }
+                                }}
+                                className={cn(
+                                  "flex items-center gap-1 px-2 py-1 rounded transition-colors",
+                                  isHighlighted ? "bg-blue-100 ring-1 ring-blue-500" : "hover:bg-slate-100"
+                                )}
+                              >
+                                <div
+                                  className={cn("w-3 h-3 rounded-sm", colors.bg)}
+                                  style={{ backgroundColor: isHighlighted ? undefined : colors.bg === "bg-slate-300" ? "#cbd5e1" : undefined }}
+                                />
+                                <span className="text-slate-600">{STATUS_LABELS[status]}</span>
+                                <span className="font-medium">{count}</span>
+                                <span className="text-slate-400">({width.toFixed(0)}%)</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="h-8 rounded-lg bg-slate-100 flex items-center justify-center text-xs text-slate-400">
+                        {isCollapsed ? "品牌已折叠" : "无匹配 SKU"}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -219,6 +246,7 @@ const AllergenColumnAnalysis = memo(function AllergenColumnAnalysis() {
               <p>• 点击上方堆叠条段落在矩阵中高亮对应行</p>
               <p>• 高亮后可在下方查看该状态商品列表</p>
               <p>• 点击商品名称可定位到矩阵对应行</p>
+              {isFiltered && <p className="text-blue-600">• 当前统计已随矩阵筛选同步</p>}
             </div>
           </div>
         </div>

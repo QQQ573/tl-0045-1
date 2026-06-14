@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Grid3X3, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
+import { Grid3X3, ChevronDown, ChevronUp, AlertTriangle, Filter } from "lucide-react";
 import { useAllergenStore } from "@/store/useAllergenStore";
 import { BRAND_COLORS } from "@/constants/colorPalette";
 import { BRAND_LABELS, BrandKey, AllergenStatus } from "@/types/allergen";
@@ -13,12 +13,14 @@ const STATUS_COLORS_HEATMAP: Record<AllergenStatus, string> = {
 };
 
 const MiniHeatmap = memo(function MiniHeatmap() {
-  const { data, heatmapOpen, toggleHeatmap, getBrandHeatmap, openAnalysis } = useAllergenStore();
+  const { data, heatmapOpen, toggleHeatmap, getBrandHeatmap, openAnalysis, searchQuery, profile, collapsedBrands } = useAllergenStore();
 
   if (!data) return null;
 
   const heatmaps = getBrandHeatmap();
   const brands: BrandKey[] = ["kfc", "mcdonalds", "华莱士"];
+  const isFiltered = searchQuery.trim() !== "" || profile.showOnlyCompliant || collapsedBrands.size > 0;
+  const totalFiltered = heatmaps.reduce((sum, h) => sum + h.filteredTotal, 0);
 
   return (
     <div className="fixed bottom-4 right-4 z-40">
@@ -33,6 +35,12 @@ const MiniHeatmap = memo(function MiniHeatmap() {
           <div className="flex items-center gap-2">
             <Grid3X3 className="w-4 h-4 text-slate-600" />
             <span className="font-semibold text-slate-700 text-sm">品牌热力图总览</span>
+            {isFiltered && (
+              <span className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-600 rounded-full flex items-center gap-1">
+                <Filter className="w-2.5 h-2.5" />
+                筛选中
+              </span>
+            )}
           </div>
           {heatmapOpen ? (
             <ChevronDown className="w-4 h-4 text-slate-500" />
@@ -43,6 +51,13 @@ const MiniHeatmap = memo(function MiniHeatmap() {
 
         {heatmapOpen && (
           <div className="p-3">
+            {isFiltered && (
+              <div className="mb-2 px-2 py-1.5 bg-blue-50 rounded-lg text-[10px] text-blue-600 flex items-center gap-1.5">
+                <Filter className="w-3 h-3" />
+                <span>当前显示 {totalFiltered} / {data.skus.length} 个 SKU</span>
+              </div>
+            )}
+
             <div className="mb-3">
               <div className="flex">
                 <div className="w-16 flex-shrink-0" />
@@ -67,9 +82,10 @@ const MiniHeatmap = memo(function MiniHeatmap() {
                 const brandHeatmap = heatmaps.find((h) => h.brand === brand);
                 if (!brandHeatmap) return null;
                 const brandColor = BRAND_COLORS[brand];
+                const isBrandCollapsed = collapsedBrands.has(brand);
 
                 return (
-                  <div key={brand} className="flex items-center">
+                  <div key={brand} className={cn("flex items-center", isBrandCollapsed && "opacity-50")}>
                     <div
                       className="w-16 flex-shrink-0 flex items-center gap-1.5 pr-2"
                     >
@@ -80,6 +96,7 @@ const MiniHeatmap = memo(function MiniHeatmap() {
                       <span className="text-xs text-slate-600 truncate" title={BRAND_LABELS[brand]}>
                         {brand === "kfc" ? "肯德基" : brand === "mcdonalds" ? "麦当劳" : "华莱士"}
                       </span>
+                      <span className="text-[9px] text-slate-400">({brandHeatmap.filteredTotal})</span>
                     </div>
                     <div className="flex gap-0.5">
                       {data.allergens.map((allergen) => {
@@ -95,11 +112,11 @@ const MiniHeatmap = memo(function MiniHeatmap() {
                               cell.status === "U" && "diagonal-pattern"
                             )}
                             style={{ backgroundColor: color, color: cell.status === "Y" || cell.status === "N" ? "white" : "#1c1917" }}
-                            title={`${allergen.labelZh}: ${cell.percentage}% ${cell.status}`}
+                            title={`${allergen.labelZh}: ${cell.percentage}% (${cell.count}/${cell.filteredTotal}) ${isFiltered ? "· 随矩阵筛选同步" : ""}`}
                           >
                             {cell.status}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-slate-800 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                              {allergen.labelZh}: {cell.percentage}%
+                              {allergen.labelZh}: {cell.percentage}% ({cell.count}/{cell.filteredTotal})
                             </div>
                           </button>
                         );

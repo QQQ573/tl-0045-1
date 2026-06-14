@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { AllergenData, SKU, BrandKey, AllergenStatus, RISK_LEVEL } from "@/types/allergen";
+import { matchesSearchQuery } from "@/lib/skuQuery";
 
 const ALLERGY_PROFILE_KEY = "allergen_profile";
 
@@ -12,17 +13,20 @@ interface ColumnAnalysis {
   allergenKey: string;
   brandStats: Record<BrandKey, { Y: number; M: number; N: number; U: number }>;
   maxRiskSkus: { brand: BrandKey; skus: SKU[] }[];
+  filteredTotal: number;
 }
 
 interface HeatmapCell {
   status: AllergenStatus;
   count: number;
   percentage: number;
+  filteredTotal: number;
 }
 
 interface BrandHeatmap {
   brand: BrandKey;
   allergens: Record<string, HeatmapCell>;
+  filteredTotal: number;
 }
 
 const DEFAULT_PROFILE: AllergyProfile = {
@@ -65,6 +69,7 @@ interface AllergenStore {
   analysisAllergenKey: string | null;
   heatmapOpen: boolean;
   highlightedStatus: AllergenStatus | null;
+  highlightedBrand: BrandKey | null;
   highlightedSkus: string[];
 
   setData: (data: AllergenData) => void;
@@ -85,10 +90,11 @@ interface AllergenStore {
   openAnalysis: (allergenKey: string) => void;
   closeAnalysis: () => void;
   toggleHeatmap: () => void;
-  highlightByStatus: (status: AllergenStatus | null) => void;
+  highlightByStatus: (status: AllergenStatus | null, brand?: BrandKey) => void;
   clearHighlight: () => void;
 
   getFilteredSkus: () => SKU[];
+  getFilteredSkusByBrand: (brand: BrandKey) => SKU[];
   getSkusByBrand: (brand: BrandKey) => SKU[];
   getBrandMaxRisk: (brand: BrandKey) => AllergenStatus;
   getSelectedSkuData: () => SKU[];
@@ -115,6 +121,7 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
   analysisAllergenKey: null,
   heatmapOpen: true,
   highlightedStatus: null,
+  highlightedBrand: null,
   highlightedSkus: [],
 
   setData: (data) => set({ data }),
@@ -179,20 +186,21 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
 
   toggleHeatmap: () => set((state) => ({ heatmapOpen: !state.heatmapOpen })),
 
-  highlightByStatus: (status) => {
+  highlightByStatus: (status, _brand) => {
     if (!status) {
-      set({ highlightedStatus: null, highlightedSkus: [] });
+      set({ highlightedStatus: null, highlightedBrand: null, highlightedSkus: [] });
       return;
     }
-    const { data } = get();
-    if (!data) return;
-    const skuIds = data.skus
-      .filter((sku) => sku.allergens[get().analysisAllergenKey || ""] === status)
+    const { getFilteredSkus, analysisAllergenKey } = get();
+    const filteredSkus = getFilteredSkus();
+    const skuIds = filteredSkus
+      .filter((sku) => sku.allergens[analysisAllergenKey || ""] === status)
       .map((sku) => sku.id);
-    set({ highlightedStatus: status, highlightedSkus: skuIds });
+    set({ highlightedStatus: status, highlightedBrand: null, highlightedSkus: skuIds });
   },
 
-  clearHighlight: () => set({ highlightedStatus: null, highlightedSkus: [] }),
+  clearHighlight: () =>
+    set({ highlightedStatus: null, highlightedBrand: null, highlightedSkus: [] }),
 
   isSkuCompliant: (sku) => {
     const { profile, data } = get();
@@ -212,13 +220,18 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
     return data.skus.filter((sku) => {
       if (collapsedBrands.has(sku.brand as BrandKey)) return false;
       if (profile.showOnlyCompliant && !isSkuCompliant(sku)) return false;
-      if (!searchQuery.trim()) return true;
-      const query = searchQuery.toLowerCase();
-      return (
-        sku.nameZh.toLowerCase().includes(query) ||
-        sku.nameEn.toLowerCase().includes(query) ||
-        sku.skuCode.toLowerCase().includes(query)
-      );
+      return matchesSearchQuery(sku, searchQuery);
+    });
+  },
+
+  getFilteredSkusByBrand: (brand) => {
+    const { collapsedBrands, profile, isSkuCompliant, data, searchQuery } = get();
+    if (!data) return [];
+    if (collapsedBrands.has(brand)) return [];
+    const brandSkus = data.skus.filter((s) => s.brand === brand);
+    return brandSkus.filter((sku) => {
+      if (profile.showOnlyCompliant && !isSkuCompliant(sku)) return false;
+      return matchesSearchQuery(sku, searchQuery);
     });
   },
 
@@ -229,14 +242,7 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
     if (profile.showOnlyCompliant) {
       return filtered.filter(isSkuCompliant);
     }
-    if (!searchQuery.trim()) return filtered;
-    const query = searchQuery.toLowerCase();
-    return filtered.filter(
-      (s) =>
-        s.nameZh.toLowerCase().includes(query) ||
-        s.nameEn.toLowerCase().includes(query) ||
-        s.skuCode.toLowerCase().includes(query)
-    );
+    return filtered.filter((s) => matchesSearchQuery(s, searchQuery));
   },
 
   getCompliantSkus: () => {
@@ -292,7 +298,7 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
   },
 
   getColumnAnalysis: () => {
-    const { data, analysisAllergenKey } = get();
+    const { data, analysisAllergenKey, getFilteredSkusByBrand } = get();
     const brands: BrandKey[] = ["kfc", "mcdonalds", "华莱士"];
 
     if (!data || !analysisAllergenKey) {
@@ -300,6 +306,7 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
         allergenKey: "",
         brandStats: {} as Record<BrandKey, { Y: number; M: number; N: number; U: number }>,
         maxRiskSkus: [],
+        filteredTotal: 0,
       };
     }
 
@@ -310,9 +317,12 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
     };
 
     const maxRiskSkus: { brand: BrandKey; skus: SKU[] }[] = [];
+    let filteredTotal = 0;
 
     brands.forEach((brand) => {
-      const brandSkus = data.skus.filter((s) => s.brand === brand);
+      const brandSkus = getFilteredSkusByBrand(brand);
+      filteredTotal += brandSkus.length;
+
       brandSkus.forEach((sku) => {
         const status = sku.allergens[analysisAllergenKey];
         brandStats[brand][status]++;
@@ -327,18 +337,18 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
       }
     });
 
-    return { allergenKey: analysisAllergenKey, brandStats, maxRiskSkus };
+    return { allergenKey: analysisAllergenKey, brandStats, maxRiskSkus, filteredTotal };
   },
 
   getBrandHeatmap: () => {
-    const { data } = get();
+    const { data, getFilteredSkusByBrand } = get();
     const brands: BrandKey[] = ["kfc", "mcdonalds", "华莱士"];
     const statuses: AllergenStatus[] = ["Y", "M", "N", "U"];
 
     if (!data) return [];
 
     return brands.map((brand) => {
-      const brandSkus = data.skus.filter((s) => s.brand === brand);
+      const brandSkus = getFilteredSkusByBrand(brand);
       const allergens: Record<string, HeatmapCell> = {};
 
       data.allergens.forEach((allergen) => {
@@ -348,18 +358,19 @@ export const useAllergenStore = create<AllergenStore>((set, get) => ({
         });
 
         const total = brandSkus.length;
-        const dominantStatus = statuses.reduce((max, s) =>
-          counts[s] > counts[max] ? s : max
-        , "N" as AllergenStatus);
+        const dominantStatus = total > 0
+          ? statuses.reduce((max, s) => counts[s] > counts[max] ? s : max, "N" as AllergenStatus)
+          : "N";
 
         allergens[allergen.key] = {
           status: dominantStatus,
           count: counts[dominantStatus],
-          percentage: Math.round((counts[dominantStatus] / total) * 100),
+          percentage: total > 0 ? Math.round((counts[dominantStatus] / total) * 100) : 0,
+          filteredTotal: total,
         };
       });
 
-      return { brand, allergens };
+      return { brand, allergens, filteredTotal: brandSkus.length };
     });
   },
 }));
